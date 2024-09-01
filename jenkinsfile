@@ -18,21 +18,63 @@ pipeline {
                     emailext to: "mayanirodrigo@gmail.com",
                     subject: "Test status Email",
                     attachLog: true,
-                    body: "Unit and Integration Tests passed successfully!"
+                    body: "Unit and Integration Tests were successful!"
                 }
                 failure {
                     emailext to: "mayanirodrigo@gmail.com",
                     subject: "Test status Email",
                     attachLog: true,
-                    body: "Unit and Integration Tests Failed!"
+                    body: "Unit and Integration Tests failed!"
                 }    
             }     
         }
 
-        stage('Code Analysis') {
+        stage ('Code Analysis') {
             steps {
                 echo 'Running Code Analysis...'
-                // using SonarQube
+                // perform code analysis using SonarQube
+            }
+        }
+
+        stage ("Security Scan") {
+            steps {
+                echo "Running security scan....."
+                // Perform security scan using OWASP Dependency-Check
+            }
+            post {
+                success {
+                    emailext to: "mayanirodrigo@gmail.com",
+                    subject: "Security Scan status Email",
+                    attachLog: true,
+                    body: "Security Scan was successful!"
+                }
+                failure {
+                    emailext to: "mayanirodrigo@gmail.com",
+                    subject: "Security Scan Email",
+                    attachLog: true,
+                    body: "Security scan found vulnerabilities!"
+                }
+            }
+        }
+
+        stage ("Deploy to Staging") {
+            steps {
+                echo "Deploying to staging server....." 
+                // Deploy to staging server using AWS CLI
+            }
+        }
+
+        stage ("Integration Tests on Staging") {
+            steps {
+                echo "Running integration tests on staging environment....." 
+                // Run integration test on staging environment
+            }
+        }
+
+        stage ("Deploy to Production") {
+            steps {
+                echo "Deploying to production server....." 
+                // Deploy to production server using AWS CLI
             }
         }
     }
