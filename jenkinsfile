@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+    stages {
+        stage ('Build') {
+            steps {
+                echo 'Building the code using Maven..'
+                // sh 'mvn clean package'
+            }
+        }
+
+        stage (' Unit and Integration Tests') {
+            steps {
+                echo 'Running unit and integration tests...'
+                // sh 'mvn test'
+            }
+            post {                   
+                success {
+                    emailext to: "mayanirodrigo@gmail.com",
+                    subject: "Test status Email",
+                    body: "Unit and Integration Tests passed successfully!"
+                }
+                failure {
+                    emailext to: "mayanirodrigo@gmail.com",
+                    subject: "Test status Email",
+                    body: "Unit and Integration Tests Failed!"
+                }    
+            }
+             
+        }
+    }
+
+}
